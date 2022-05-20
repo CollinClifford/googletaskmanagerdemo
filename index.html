@@ -7,6 +7,9 @@
     <title>Document</title>
     <script>
       window.dataLayer = window.dataLayer || [];
+      dataLayer.push({
+        event: "buttonClick",
+      });
     </script>
     <!-- Google Tag Manager -->
     <script>
@@ -51,7 +54,7 @@
     Click Me!
     <button
       class="trackingButton"
-      onClick="dataLayer.push({'event': 'login'});"
+      onClick="dataLayer.push({'event': 'clickedButton'});"
     >
       Send event to Google Tag Manager
     </button>
