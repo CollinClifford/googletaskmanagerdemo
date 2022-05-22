@@ -1,8 +1,13 @@
+-- List authors(id, first_name, last_name, country_name), book name, ISBN, price,
+-- discount, is_hard_copy - if they have books, or null if they don't.
+-- Order by author last_name, first_name.
 
-
-
-
-
+SELECT a.id, a.first_name, a.last_name, c.name as country_name, b.title, b.isbn, bd.price, bd.discount, bd.is_hard_copy 
+FROM Author AS a
+JOIN Country AS c on a.country_id=c.id
+LEFT JOIN Book AS b on b.author_id=a.id
+left join bookdetails as bd on bd.book_id=b.id
+order by a.last_name, a.first_name desc
 
 -- List authors (id, first_name, last_name, country_name) where country code is the USA.
 select a.id, a.first_name, a.last_name, c.name
@@ -47,3 +52,12 @@ left join book as b on a.id=b.author_id
 left join bookdetails as bd on b.id=bd.book_id 
 group by a.first_name, a.last_name 
 order by bd.price
+
+-- List the cheapest book (price) of every author (first_name, last_name).
+-- If an author does not have books, display -1 as the price.
+
+select coalesce(min(bd.price), -1), a.first_name, a.last_name
+from author as a
+left join book as b on a.id=b.author_id 
+left join bookdetails as bd on b.id=bd.book_id 
+group by a.first_name, a.last_name
