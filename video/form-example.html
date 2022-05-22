@@ -1,0 +1,23 @@
+<!-- Create an HTML form that pushes lead information (name, email and phone) into Zapier. 
+    Check if the email and phone are valid using a regular expression in Zapier, and then create a record in Google Sheets if they are. 
+    Use loom.com to take a video of the process from end to end. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="myForm" action="https://hooks.zapier.com/hooks/catch/12561221/bf5kz4b/" type="POST">
+        <input type="text" name="name" placeholder="Enter your name">
+        
+        <input type="email" name="email" placeholder="Enter your email">
+        
+        <input type="tel" name="phone" placeholder="Enter your phone number">
+        
+        <input type="submit" name="submit">
+    </form>
+</body>
+</html>
