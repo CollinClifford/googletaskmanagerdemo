@@ -46,16 +46,6 @@ order by bd.price asc
 -- List the cheapest book (price) of every author (first_name, last_name).
 -- If an author does not have books, display -1 as the price.
 
-select case when bd.price is null then '-1' else min(bd.price) end, a.first_name, a.last_name
-from author as a
-left join book as b on a.id=b.author_id 
-left join bookdetails as bd on b.id=bd.book_id 
-group by a.first_name, a.last_name 
-order by bd.price
-
--- List the cheapest book (price) of every author (first_name, last_name).
--- If an author does not have books, display -1 as the price.
-
 select coalesce(min(bd.price), -1), a.first_name, a.last_name
 from author as a
 left join book as b on a.id=b.author_id 
