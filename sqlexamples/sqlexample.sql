@@ -43,7 +43,7 @@ select a.id, a.first_name, a.last_name, c.name
 from Author as a
 left join Book as b on b.author_id=a.id
 join Country as c on a.country_id=c.id
-where a.country_id = c.id and b.title is not null
+where b.title is not null
 group by a.id, c.name
 order by count(b.title) desc
 
@@ -55,7 +55,7 @@ select concat(a.id, ' ', a.first_name, ' ', a.last_name, ' ', c.name) as authors
 from Author as a
 left join Book as b on b.author_id=a.id
 join Country as c on a.country_id=c.id
-where a.country_id = c.id and b.title is not null
+where b.title is not null
 group by a.id, c.name
 order by count(b.title) desc
 
