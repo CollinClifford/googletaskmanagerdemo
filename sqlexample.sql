@@ -1,6 +1,6 @@
--- List authors(id, first_name, last_name, country_name), book name, ISBN, price,
--- discount, is_hard_copy - if they have books, or null if they don't.
--- Order by author last_name, first_name.
+/* List authors(id, first_name, last_name, country_name), book name, ISBN, price,
+discount, is_hard_copy - if they have books, or null if they don't.
+Order by author last_name, first_name. */
 
 select a.id, a.first_name, a.last_name, c.name as country_name, b.title, b.isbn, bd.price, bd.discount, bd.is_hard_copy 
 from Author as a
@@ -9,10 +9,10 @@ left join Book as b on b.author_id=a.id
 left join bookdetails as bd on bd.book_id=b.id
 order by a.last_name, a.first_name desc
 
--- If I'm suppose to have the author's concatenated 
--- List authors(id, first_name, last_name, country_name), book name, ISBN, price,
--- discount, is_hard_copy - if they have books, or null if they don't.
--- Order by author last_name, first_name.
+/* If I'm suppose to have the author's concatenated 
+List authors(id, first_name, last_name, country_name), book name, ISBN, price,
+discount, is_hard_copy - if they have books, or null if they don't.
+Order by author last_name, first_name. */
 
 select concat(a.id, ' ', a.first_name, ' ', a.last_name, ' ', c.name) as authors, b.title as "book name", b.isbn, bd.price, bd.discount, bd.is_hard_copy 
 from Author as a
@@ -22,20 +22,22 @@ left join bookdetails as bd on bd.book_id=b.id
 order by a.last_name, a.first_name desc
 
 -- List authors (id, first_name, last_name, country_name) where country code is the USA.
+
 select a.id, a.first_name, a.last_name, c.name
 from Author as a
 join Country as c on a.country_id=c.id
 where c.code='123'
 
---If I'm suppose to have the authors concatenated
--- List authors (id, first_name, last_name, country_name) where country code is the USA.
+/* If I'm suppose to have the authors concatenated
+List authors (id, first_name, last_name, country_name) where country code is the USA. */
+
 select concat(a.id, ' ', a.first_name, ' ', a.last_name, ' ', c.name) as authors
 from Author as a
 join Country as c on a.country_id=c.id
 where c.code='123'
--------------------------------------------BROKEN
---  List authors(id, first_name, last_name, country_name) with books.
--- Order by the number of books descending.
+
+/* List authors(id, first_name, last_name, country_name) with books.
+Order by the number of books descending. */
 
 select a.id, a.first_name, a.last_name, c.name
 from Author as a
@@ -45,9 +47,9 @@ where a.country_id = c.id and b.title is not null
 group by a.id, c.name
 order by count(b.title) desc
 
---if I'm suppose to concatenate authors
---  List authors(id, first_name, last_name, country_name) with books.
--- Order by the number of books descending.
+/* if I'm suppose to concatenate authors
+List authors(id, first_name, last_name, country_name) with books.
+Order by the number of books descending. */
 
 select concat(a.id, ' ', a.first_name, ' ', a.last_name, ' ', c.name) as authors
 from Author as a
@@ -65,8 +67,8 @@ join Author as A on a.id=b.author_id
 join Country as c on c.id=a.country_id
 where b.author_id = a.id and a.country_id = c.id and c.name = 'USA'
 
--- Select books (title, isbn, discount, price) where 20 <= discount <=30, order by price
--- increasing.
+/* Select books (title, isbn, discount, price) where 20 <= discount <=30, order by price
+increasing. */
 
 select b.title, b.isbn, bd.discount, bd.price
 from Book as b
@@ -74,9 +76,9 @@ join BookDetails as bd on bd.book_id=b.id
 where bd.discount >= 20 and bd.discount <= 30
 order by bd.price asc
 
--- if I'm suppose to concatenate
--- Select books (title, isbn, discount, price) where 20 <= discount <=30, order by price
--- increasing.
+/* if I'm suppose to concatenate
+Select books (title, isbn, discount, price) where 20 <= discount <=30, order by price
+increasing. */
 
 select concat(b.title, ', ', b.isbn, ', ', bd.discount, ', ', bd.price) as books
 from Book as b
@@ -84,8 +86,8 @@ join BookDetails as bd on bd.book_id=b.id
 where bd.discount >= 20 and bd.discount <= 30
 order by bd.price asc
 
--- List the cheapest book (price) of every author (first_name, last_name).
--- If an author does not have books, display -1 as the price.
+/* List the cheapest book (price) of every author (first_name, last_name).
+If an author does not have books, display -1 as the price. */
 
 select coalesce(min(bd.price), -1), a.first_name, a.last_name
 from author as a
@@ -93,117 +95,12 @@ left join book as b on a.id=b.author_id
 left join bookdetails as bd on b.id=bd.book_id 
 group by a.first_name, a.last_name
 
--- if I'm suppose to concatenate 
--- List the cheapest book (price) of every author (first_name, last_name).
--- If an author does not have books, display -1 as the price.
+/* if I'm suppose to concatenate 
+List the cheapest book (price) of every author (first_name, last_name).
+If an author does not have books, display -1 as the price. */
 
 select coalesce(min(bd.price), -1) as price, concat(a.first_name, ' ' , a.last_name) as author
 from author as a
 left join book as b on a.id=b.author_id 
 left join bookdetails as bd on b.id=bd.book_id 
 group by a.first_name, a.last_name
-
-
--- TO CREATE TABLES --
-
-create table Country (
-    id int generated by default as identity primary key,
-    name varchar(255),
-    code varchar(3)
-);
-
-create table Author (
-    id int generated by default as identity primary key,
-    first_name varchar(100),
-    last_name varchar(100),
-    country_id int,
-    foreign key (country_id) references Country(id)
-);
-
-create table Book (
-    id int generated by default as identity primary key,
-    title varchar(255),
-    isbn varchar(13),
-    author_id int,
-    foreign key (author_id) references Author(id)
-);
-
-create table BookDetails (
-    id int generated by default as identity primary key,
-    price decimal(10, 2),
-    discount decimal(10, 2),
-    is_hard_copy boolean,
-    book_id int,
-    foreign key (book_id) references Book(id)
-);
-
--- inserting data
-
-insert into Country (name, code)
-values ('USA', '123'), 
-		('Australia', '61'), 
-		('France', '33'),
-		('Greece', '30'),
-		('Iceland', '354'),
-		('Ireland', '355')
-
-insert into Author (first_name, last_name, country_id)
-values ('Edgar Allan', 'Poe', 1),
-        ('Charles', 'Bukowski', 1),
-        ('Collin', 'Clifford', 1),
-        ('Jane', 'Harper', 2),
-        ('Richard', 'Flanagan', 2),
-        ('Victor', 'Hugo', 3),
-        ('Marcel', 'Proust', 3),
-        ('Nikos', 'Kazantzakis', 4),
-        ('Alexandros', 'Papadiamantis', 4),
-        ('Arnaldur', 'Indriðason', 5),
-        ('Yrsa', 'Sigurðardóttir', 5),
-        ('James', 'Joyce', 6),
-        ('Oscar', 'Wilde', 6)
-
-insert into Book (title, isbn, author_id)
-values ('The Raven', 'l23k4h823', 27),
-        ('The Black Cat', 'kalsj4y2i', 27),
-        ('The Tell-Tale Heart', 'kalj23adf', 27),
-        ('Annabel Lee', 'dfag2341', 27),
-        ('Post Office', 'asjh3l412', 28),
-        ('Ham on Rye', 'kjelhw41', 28),
-        ('The Dry', 'kl121s', 30),
-        ('The Lost Man', '124resa', 30),
-        ('The Narrow Road to the Deep North', 'adgtui234h', 31),
-        ('Ghoulds Book of Fish', 'mxcvri23', 31),
-        ('Les Miserables', 'hgurwho23', 32),
-        ('Sodom and Gomorrah', 'mnvbeuiw2', 33),
-        ('Zorba the Greek', 'bcfuw342', 34),
-        ('The Murderess', 'zxctuwoei2', 35),
-        ('Jar City', 'lkjgsd234', 36),
-        ('Last Rituals', 'oiutek13', 37),
-        ('The Importance of Being Earnest', 'wieruy234', 38),
-        ('The Picture of Dorian Gray', '123kasdfh', 38),
-        ('Ulysses', '12fskje4', 39),
-        ('Dubliners', 'oi2u312', 39),
-        ('Finnegans Wake', '23128ousf', 39)
-
-insert into BookDetails (price, discount, is_hard_copy, book_id)
-values (10.99, 20, yes, 1),
-        (8.99, 15, no, 2),
-        (12.99, 14, no, 3),
-        (8.99, 32, no, 4),
-        (15.99, 50, yes, 5),
-        (16.00, 24, yes, 6),
-        (12.99, 12, no, 7),
-        (24.99, 64, no, 8),
-        (14.49, 25, yes, 9),
-        (22.50, 20, yes, 10),
-        (12.99, 12, no, 11),
-        (15.98, 0, yes, 12),
-        (23.12, 0, no, 13),
-        (33.12, 32, no, 14),
-        (13.00, 22.22, yes, 15),
-        (22.25, 25, yes, 16),
-        (10.00, 43, no, 17),
-        (12.99, 11, yes, 18),
-        (11.98, 30, yes, 19),
-        (10.00, 12, no, 20),
-        (24.99, 25, no, 21)
